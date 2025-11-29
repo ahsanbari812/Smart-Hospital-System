@@ -86,7 +86,7 @@ const LabResults = () => {
                                             </TableCell>
                                             <TableCell>
                                                 <Badge variant="outline" className="bg-orange-50 text-orange-700 border-orange-200">
-                                                    {test.testName}
+                                                    {test.LabTestCatalog?.testName || 'Unknown Test'}
                                                 </Badge>
                                             </TableCell>
                                             <TableCell>
@@ -100,7 +100,7 @@ const LabResults = () => {
                                                     {test.status}
                                                 </Badge>
                                             </TableCell>
-                                            <TableCell>${Number(test.price || 0).toFixed(2)}</TableCell>
+                                            <TableCell>${Number(test.LabTestCatalog?.price || 0).toFixed(2)}</TableCell>
                                             <TableCell className="text-right">
                                                 {test.status === 'completed' && test.resultUrl ? (
                                                     <Button

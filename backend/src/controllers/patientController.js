@@ -186,6 +186,10 @@ const getPatientLabTests = async (req, res) => {
                 {
                     model: Doctor,
                     include: [{ model: User, attributes: ['name'] }]
+                },
+                {
+                    model: require('../models').LabTestCatalog,
+                    attributes: ['testName', 'testCode', 'category', 'price']
                 }
             ]
         });

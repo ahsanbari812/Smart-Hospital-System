@@ -31,9 +31,15 @@ const MyPrescriptions = () => {
         return prescription.PrescriptionMedicines.map(pm => pm.Medicine?.name || 'Unknown').join(', ');
     };
 
-    const extractDiagnosis = (instructions) => {
-        if (!instructions) return 'N/A';
-        const diagnosisMatch = instructions.match(/Diagnosis:\s*([^.]+)/);
+    const extractDiagnosis = (prescription) => {
+        // First check if diagnosis field exists
+        if (prescription.diagnosis) {
+            return prescription.diagnosis;
+        }
+
+        // Fall back to extracting from instructions
+        if (!prescription.instructions) return 'N/A';
+        const diagnosisMatch = prescription.instructions.match(/Diagnosis:\s*([^.]+)/);
         return diagnosisMatch ? diagnosisMatch[1].trim() : 'General Consultation';
     };
 
@@ -95,7 +101,7 @@ const MyPrescriptions = () => {
                                             </TableCell>
                                             <TableCell>
                                                 <Badge variant="outline" className="bg-green-50 text-green-700 border-green-200">
-                                                    {extractDiagnosis(prescription.instructions)}
+                                                    {extractDiagnosis(prescription)}
                                                 </Badge>
                                             </TableCell>
                                             <TableCell>
