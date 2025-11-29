@@ -12,7 +12,15 @@ This document provides copy-paste commands for quick deployment.
 git --version
 ```
 
-## Step 1: Initialize Git Repository
+## Step 1: Configure Git (First Time Only)
+
+```bash
+# Set your name and email
+git config --global user.name "Your Name"
+git config --global user.email "your.email@example.com"
+```
+
+## Step 2: Initialize Git Repository
 
 ```bash
 # Navigate to your project
@@ -28,14 +36,14 @@ git add .
 git commit -m "Initial commit - Smart Hospital System ready for deployment"
 ```
 
-## Step 2: Create GitHub Repository
+## Step 3: Create GitHub Repository
 
 1. Go to https://github.com/new
 2. Create a new repository named `smart-hospital-system`
 3. **DO NOT** initialize with README, .gitignore, or license
 4. Click "Create repository"
 
-## Step 3: Push to GitHub
+## Step 4: Push to GitHub
 
 ```bash
 # Add remote (replace YOUR_USERNAME with your GitHub username)
@@ -46,7 +54,7 @@ git branch -M main
 git push -u origin main
 ```
 
-## Step 4: Deploy Database (Railway)
+## Step 5: Deploy Database (Railway)
 
 1. Go to https://railway.app
 2. Sign up with GitHub
@@ -58,7 +66,7 @@ git push -u origin main
    - MYSQL_PASSWORD
    - MYSQL_DATABASE
 
-## Step 5: Deploy Backend (Render)
+## Step 6: Deploy Backend (Render)
 
 1. Go to https://render.com
 2. Sign up with GitHub
@@ -88,14 +96,14 @@ git push -u origin main
 7. Click "Create Web Service"
 8. **Save your backend URL**: `https://smart-hospital-backend.onrender.com`
 
-## Step 6: Update Backend with Frontend URL
+## Step 7: Update Backend with Frontend URL
 
 After frontend is deployed, go back to Render backend:
 1. Go to "Environment" tab
 2. Update `FRONTEND_URL` variable with your frontend URL
 3. Save changes (will auto-redeploy)
 
-## Step 7: Deploy Frontend (Vercel)
+## Step 8: Deploy Frontend (Vercel)
 
 1. Go to https://vercel.com
 2. Sign up with GitHub
@@ -113,12 +121,12 @@ After frontend is deployed, go back to Render backend:
      ```
      VITE_API_URL=https://smart-hospital-backend.onrender.com
      ```
-     (Use your actual backend URL from Step 5)
+     (Use your actual backend URL from Step 6)
 
 7. Click "Deploy"
 8. **Save your frontend URL**: `https://smart-hospital-system.vercel.app`
 
-## Step 8: Test Your Deployment
+## Step 9: Test Your Deployment
 
 1. Visit your frontend URL
 2. Test registration
@@ -168,6 +176,13 @@ If you prefer everything in one place:
 - Verify Railway database is running
 - Check environment variables match exactly
 - Ensure no extra spaces in credentials
+
+### Git commit fails
+- Configure Git identity first:
+  ```bash
+  git config --global user.name "Your Name"
+  git config --global user.email "your.email@example.com"
+  ```
 
 ---
 
