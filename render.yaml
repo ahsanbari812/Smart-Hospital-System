@@ -1,0 +1,13 @@
+services:
+  # Backend Web Service
+  - type: web
+    name: smart-hospital-backend
+    env: node
+    buildCommand: cd backend && npm install
+    startCommand: cd backend && npm start
+    healthCheckPath: /health
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: PORT
+        value: 10000
