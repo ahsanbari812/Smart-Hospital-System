@@ -46,7 +46,7 @@ const LabManager = () => {
 
     const filteredTests = labTests.filter(test =>
         test.Patient?.User?.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        test.testName.toLowerCase().includes(searchTerm.toLowerCase())
+        test.LabTestCatalog?.testName.toLowerCase().includes(searchTerm.toLowerCase())
     );
 
     return (
@@ -105,7 +105,7 @@ const LabManager = () => {
                                             <TableCell>{test.Patient?.User?.name}</TableCell>
                                             <TableCell>
                                                 <Badge variant="outline" className="bg-orange-50 text-orange-700 border-orange-200">
-                                                    {test.testName}
+                                                    {test.LabTestCatalog?.testName || 'Unknown Test'}
                                                 </Badge>
                                             </TableCell>
                                             <TableCell>{test.Doctor?.User?.name}</TableCell>

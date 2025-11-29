@@ -1,4 +1,4 @@
-const { User, Doctor, Patient, Department, Appointment, Bill, LabTest } = require('../models');
+const { User, Doctor, Patient, Department, Appointment, Bill, LabTest, LabTestCatalog } = require('../models');
 const bcrypt = require('bcryptjs');
 
 // @desc    Get all doctors
@@ -183,7 +183,8 @@ const getLabTests = async (req, res) => {
             where: whereClause,
             include: [
                 { model: Patient, include: [{ model: User, attributes: ['name'] }] },
-                { model: Doctor, include: [{ model: User, attributes: ['name'] }] }
+                { model: Doctor, include: [{ model: User, attributes: ['name'] }] },
+                { model: LabTestCatalog, attributes: ['testName', 'testCode', 'category'] }
             ],
             order: [['createdAt', 'DESC']]
         });
