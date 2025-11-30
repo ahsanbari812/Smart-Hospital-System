@@ -3,11 +3,22 @@ const cors = require('cors');
 const dotenv = require('dotenv');
 const path = require('path');
 const syncDatabase = require('./src/utils/syncDb');
+const { startKeepAlive } = require('./src/utils/keep-alive');
 
 // Load env vars
 dotenv.config();
 
 const app = express();
+
+// Response time logging middleware
+app.use((req, res, next) => {
+    const start = Date.now();
+    res.on('finish', () => {
+        const duration = Date.now() - start;
+        console.log(`${req.method} ${req.path} - ${res.statusCode} - ${duration}ms`);
+    });
+    next();
+});
 
 // Middleware
 const allowedOrigins = [
@@ -40,7 +51,8 @@ app.get('/health', (req, res) => {
     res.status(200).json({
         status: 'OK',
         timestamp: new Date(),
-        environment: process.env.NODE_ENV || 'development'
+        environment: process.env.NODE_ENV || 'development',
+        uptime: process.uptime()
     });
 });
 
@@ -65,7 +77,10 @@ const PORT = process.env.PORT || 5000;
 const startServer = async () => {
     await syncDatabase();
     app.listen(PORT, () => {
-        console.log(`Server running on port ${PORT} `);
+        console.log(`Server running on port ${PORT}`);
+
+        // Start keep-alive service in production
+        startKeepAlive();
     });
 };
 

@@ -10,23 +10,46 @@ export const AuthProvider = ({ children }) => {
     const [loading, setLoading] = useState(true);
 
     useEffect(() => {
-        checkUserLoggedIn();
+        initializeAuth();
     }, []);
 
-    const checkUserLoggedIn = async () => {
+    const initializeAuth = () => {
+        // Check localStorage first (fast, no API call)
         const token = localStorage.getItem('token');
-        if (token) {
+        const cachedUser = localStorage.getItem('user');
+
+        if (token && cachedUser) {
             try {
-                const res = await api.get('/auth/me');
-                setUser(res.data.data);
+                setUser(JSON.parse(cachedUser));
             } catch (error) {
-                console.error('Session expired or invalid:', error);
-                localStorage.removeItem('token');
+                console.error('Failed to parse cached user:', error);
                 localStorage.removeItem('user');
-                setUser(null);
+                localStorage.removeItem('token');
             }
         }
         setLoading(false);
+    };
+
+    // Validate token with backend (called by ProtectedRoute)
+    const validateSession = async () => {
+        const token = localStorage.getItem('token');
+        if (!token) {
+            setUser(null);
+            return false;
+        }
+
+        try {
+            const res = await api.get('/auth/me');
+            setUser(res.data.data);
+            localStorage.setItem('user', JSON.stringify(res.data.data));
+            return true;
+        } catch (error) {
+            console.error('Session expired or invalid:', error);
+            localStorage.removeItem('token');
+            localStorage.removeItem('user');
+            setUser(null);
+            return false;
+        }
     };
 
     const login = async (email, password) => {
@@ -65,6 +88,7 @@ export const AuthProvider = ({ children }) => {
         login,
         logout,
         register,
+        validateSession,
         loading
     };
 

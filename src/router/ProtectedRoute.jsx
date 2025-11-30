@@ -1,10 +1,31 @@
+import { useState, useEffect } from 'react';
 import { Navigate, Outlet } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
+import LoadingFallback from '../components/LoadingFallback';
 
 const ProtectedRoute = ({ allowedRoles }) => {
-    const { user } = useAuth();
+    const { user, validateSession } = useAuth();
+    const [isValidating, setIsValidating] = useState(true);
+    const [isValid, setIsValid] = useState(false);
 
-    if (!user) {
+    useEffect(() => {
+        const checkSession = async () => {
+            if (user) {
+                // Validate session with backend
+                const valid = await validateSession();
+                setIsValid(valid);
+            }
+            setIsValidating(false);
+        };
+
+        checkSession();
+    }, [user, validateSession]);
+
+    if (isValidating) {
+        return <LoadingFallback />;
+    }
+
+    if (!user || !isValid) {
         return <Navigate to="/login" replace />;
     }
 
